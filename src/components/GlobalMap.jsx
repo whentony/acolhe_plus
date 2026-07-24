@@ -307,9 +307,7 @@ const GlobalMap = ({ facilities, testimonials, onSelectFacility, onAddDynamicFac
 
   return (
     <div className="global-map-container animate-fade-in">
-      <div className="map-header">
-        <h2>Mapa de Acolhimento</h2>
-        <p>Busque seu endereço para encontrar as unidades de saúde oficiais mais próximas.</p>
+      <div className="map-header" style={{ marginBottom: '12px' }}>
         <div className="search-container">
           <form onSubmit={handleSearchSubmit} className="search-bar">
             <input 

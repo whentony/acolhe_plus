@@ -9,12 +9,14 @@
   background: #0f172a; /* Cor sólida para evitar vazamento de cartas do Swiper */
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
   border: 1px solid var(--glass-border);
+  max-height: 100%;
 }
 
 .card-media {
   position: relative;
-  height: 280px;
+  height: 200px;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .image-view, .map-view {
@@ -57,8 +59,10 @@
 }
 
 .card-content {
-  padding: 24px;
+  padding: 16px;
   text-align: center;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .facility-name {

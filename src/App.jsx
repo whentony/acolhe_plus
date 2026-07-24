@@ -231,11 +231,14 @@ function App() {
                     facility={facility} 
                     testimonials={testimonials[facility.id] || []}
                     onVote={(type) => {
-                      // Fix current index before opening modal to ensure vote goes to correct facility
                       setActiveVote(type);
                       setShowModal(true);
                     }} 
                     userLocation={userLocation}
+                    onGoToMap={() => {
+                      setMapTargetLocation({ lat: facility.lat, lng: facility.lng });
+                      setActiveTab('map');
+                    }}
                   />
                 </SwiperSlide>
               ))}
@@ -247,13 +250,6 @@ function App() {
 
   return (
     <div className="app-container">
-      {activeTab !== 'profile' && activeTab !== 'map' && activeTab !== 'my-reports' && activeTab !== 'specialized' && (
-        <header className="app-header">
-          <h1>Acolhe<span>+</span></h1>
-          <p>Mapeando o atendimento à nossa comunidade</p>
-        </header>
-      )}
-      
       <main className="app-main">
         {renderContent()}
       </main>

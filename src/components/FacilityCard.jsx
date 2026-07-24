@@ -1,46 +1,10 @@
 import React, { useState } from 'react';
-import { GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
-import { X, Heart, MapPin, Building, ChevronDown, ChevronUp, ThumbsUp, ThumbsDown, Navigation2 } from 'lucide-react';
+import { X, Heart, MapPin, Building, ThumbsUp, ThumbsDown, Navigation2, Map } from 'lucide-react';
 import './FacilityCard.css';
 
-const mapContainerStyle = {
-  width: '100%',
-  height: '100%',
-  zIndex: 1
-};
-
-const darkMapStyle = [
-  { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
-  { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
-  { featureType: "poi.business", stylers: [{ visibility: "off" }] }
-];
-
-const libraries = ['places'];
-
-const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLocation }) => {
-  const [showMap, setShowMap] = useState(false);
+const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLocation, onGoToMap }) => {
   const [isCheckingLocation, setIsCheckingLocation] = useState(false);
   const [locationError, setLocationError] = useState(null);
-  
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
-    libraries
-  });
-
-  const center = { lat: facility.lat, lng: facility.lng };
-
-  const isHospital = facility.type?.toLowerCase().includes('hospital');
-  const svgIcon = {
-    url: isHospital 
-      ? 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg width="36" height="36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#f5a9b8" stroke="white" stroke-width="3"/><text x="18" y="23" font-size="16" text-anchor="middle" fill="white">🏥</text></svg>')
-      : 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg width="36" height="36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#5bcefa" stroke="white" stroke-width="3"/><text x="18" y="23" font-size="16" text-anchor="middle" fill="white">🩺</text></svg>'),
-    scaledSize: (isLoaded && window.google && window.google.maps) ? new window.google.maps.Size(36, 36) : null,
-    anchor: (isLoaded && window.google && window.google.maps) ? new window.google.maps.Point(18, 18) : null,
-  };
 
   // Fórmula de Haversine para calcular distância entre duas coordenadas em metros
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -107,40 +71,7 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
   };
 
   return (
-    <div className="facility-card glass-panel animate-fade-in">
-      <div className="card-media">
-        {showMap ? (
-          <div className="map-view">
-            {isLoaded ? (
-              <GoogleMap
-                mapContainerStyle={mapContainerStyle}
-                center={center}
-                zoom={15}
-                options={{
-                  styles: darkMapStyle,
-                  disableDefaultUI: true,
-                  zoomControl: false,
-                  gestureHandling: 'none' // equivalente a scrollWheelZoom={false} e draggable={false}
-                }}
-              >
-                <MarkerF position={center} icon={window.google ? svgIcon : null} />
-              </GoogleMap>
-            ) : (
-              <div style={{ width: '100%', height: '100%', backgroundColor: '#0f172a' }}></div>
-            )}
-          </div>
-        ) : (
-          <div className="image-view" style={{ backgroundImage: `url(${facility.image})` }}>
-            <div className="image-overlay"></div>
-          </div>
-        )}
-        
-        <button className="toggle-map-btn" onClick={() => setShowMap(!showMap)}>
-          {showMap ? 'Ocultar Mapa' : 'Ver no Mapa'}
-          {showMap ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-      </div>
-
+    <div className="facility-card glass-panel animate-fade-in" style={{ justifyContent: 'center' }}>
       <div className="card-content">
         <h2 className="facility-name">{facility.name}</h2>
         <div className="facility-info">
@@ -156,7 +87,29 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
           <span className="info-item"><MapPin size={16} /> {facility.address}</span>
         </div>
         
-        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '12px' }}>
+        <button 
+          onClick={onGoToMap}
+          style={{
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid var(--glass-border)',
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '20px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '0.9rem',
+            cursor: 'pointer',
+            margin: '0 auto 16px auto',
+            transition: 'background 0.2s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+        >
+          <Map size={16} /> Ver no Mapa
+        </button>
+        
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '4px' }}>
           <span className="stat-pill positive" style={{ 
             opacity: testimonials.length === 0 ? 0.5 : 1,
             backgroundColor: 'rgba(34, 197, 94, 0.1)',
@@ -213,7 +166,7 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
           )}
         </div>
         
-        <p className="card-prompt text-gradient-pride" style={{ fontSize: '1.1rem', marginTop: '8px' }}>
+        <p className="card-prompt text-gradient-pride" style={{ fontSize: '1.1rem', marginTop: '16px', marginBottom: '16px' }}>
           {isCheckingLocation ? 'Verificando sua localização...' : 'Como foi o acolhimento neste local?'}
         </p>
         

@@ -39,6 +39,7 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+  padding-bottom: calc(85px + env(safe-area-inset-bottom, 12px));
 }
 
 .tinder-layout {
@@ -47,6 +48,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 1;
+  min-height: 0;
 }
 
 /* Utilitários globais rápidos para margens */

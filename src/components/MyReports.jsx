@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ArrowLeft, MessageSquare, Heart, X } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Star } from 'lucide-react';
 import './MyReports.css';
 
 const MyReports = ({ user, testimonials, facilities, onBack, onGoToMap }) => {
@@ -59,12 +59,17 @@ const MyReports = ({ user, testimonials, facilities, onBack, onGoToMap }) => {
                   <p>Avaliação comunitária</p>
                 </div>
                 
-                <div className={`report-vote-badge ${report.isPositive ? 'positive' : 'negative'}`}>
-                  {report.isPositive ? (
-                    <><Heart size={14} /> Acolhedor</>
-                  ) : (
-                    <><X size={14} /> Não Acolhedor</>
-                  )}
+                <div className={`report-vote-badge`} style={{ background: 'transparent', border: 'none', padding: 0 }}>
+                  <div style={{ display: 'flex', gap: '2px' }}>
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <Star 
+                        key={star} 
+                        size={14} 
+                        fill={star <= (report.rating || 0) ? '#fbbf24' : 'transparent'} 
+                        color={star <= (report.rating || 0) ? '#fbbf24' : 'rgba(255, 255, 255, 0.2)'} 
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
               

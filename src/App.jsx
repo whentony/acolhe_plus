@@ -134,19 +134,19 @@ function App() {
     setTestimonials(prev => {
       if (prev[newFacility.id]) return prev;
       
-      const isPositive = Math.random() > 0.4;
+      const rating = Math.floor(Math.random() * 5) + 1;
       const mockReviews = [
         {
           id: Date.now(),
           name: 'Anônimo',
-          recommended: isPositive,
-          text: isPositive ? 'Fui muito bem recebida e respeitaram meu nome.' : 'Profissionais despreparados, erraram meu pronome várias vezes na fila.',
+          rating: rating,
+          text: rating >= 3 ? 'Fui muito bem recebida e respeitaram meu nome.' : 'Profissionais despreparados, erraram meu pronome várias vezes na fila.',
           date: new Date().toISOString().split('T')[0]
         },
         {
           id: Date.now() + 1,
           name: 'Alex',
-          recommended: true,
+          rating: 5,
           text: 'Atendimento humanizado, recomendo.',
           date: new Date().toISOString().split('T')[0]
         }

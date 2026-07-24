@@ -143,19 +143,19 @@ export const SPECIALIZED_CLINICS = [
 
 export const INITIAL_TESTIMONIALS = {
   'f1': [
-    { id: 1, name: 'Anônimo', recommended: true, text: 'A equipe de enfermagem foi muito respeitosa, me trataram pelo nome social o tempo todo.', date: '2023-10-01' },
-    { id: 2, name: 'Maria', recommended: false, text: 'O médico foi invasivo com perguntas desnecessárias sobre meu corpo.', date: '2023-10-05' }
+    { id: 1, name: 'Anônimo', rating: 5, text: 'A equipe de enfermagem foi muito respeitosa, me trataram pelo nome social o tempo todo.', date: '2023-10-01' },
+    { id: 2, name: 'Maria', rating: 1, text: 'O médico foi invasivo com perguntas desnecessárias sobre meu corpo.', date: '2023-10-05' }
   ],
   'f2': [
-    { id: 4, name: 'Alex', recommended: true, text: 'Lugar essencial. Todos são muito bem treinados para nos atender.', date: '2023-10-03' }
+    { id: 4, name: 'Alex', rating: 4, text: 'Lugar essencial. Todos são muito bem treinados para nos atender.', date: '2023-10-03' }
   ],
   'f3': [
-    { id: 5, name: 'Camila', recommended: false, text: 'Fiquei horas esperando e a ficha preenchida não respeitava minha identidade.', date: '2023-10-04' }
+    { id: 5, name: 'Camila', rating: 2, text: 'Fiquei horas esperando e a ficha preenchida não respeitava minha identidade.', date: '2023-10-04' }
   ],
   'f4': [
-    { id: 6, name: 'João', recommended: true, text: 'Excelente atendimento humanizado. Me senti muito acolhido.', date: '2023-10-06' }
+    { id: 6, name: 'João', rating: 5, text: 'Excelente atendimento humanizado. Me senti muito acolhido.', date: '2023-10-06' }
   ],
   'f5': [
-    { id: 7, name: 'Luna', recommended: false, text: 'Fui maltratada na recepção, chamaram meu nome de registro em voz alta.', date: '2023-10-07' }
+    { id: 7, name: 'Luna', rating: 1, text: 'Fui maltratada na recepção, chamaram meu nome de registro em voz alta.', date: '2023-10-07' }
   ]
 };

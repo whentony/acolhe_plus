@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Heart, MapPin, Building, ThumbsUp, ThumbsDown, Navigation2, Map } from 'lucide-react';
+import { MapPin, Building, Navigation2, Map, Star } from 'lucide-react';
 import './FacilityCard.css';
 
 const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLocation, onGoToMap }) => {
@@ -34,7 +34,7 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
     setTimeout(() => setLocationError(null), 5000); // Some depois de 5s
   };
 
-  const handleVoteClick = (isPositive) => {
+  const handleVoteClick = (ratingValue) => {
     setLocationError(null);
     if (!navigator.geolocation) {
       showError("Seu navegador não suporta geolocalização.");
@@ -49,14 +49,15 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
         const { latitude, longitude } = position.coords;
         const distance = calculateDistance(latitude, longitude, facility.lat, facility.lng);
         
-        if (distance <= 500) {
-          onVote(isPositive);
-        } else {
-          const distanceText = distance < 1000 
-            ? `${Math.round(distance)} metros` 
-            : `${(distance / 1000).toFixed(1)}km`;
-          showError(`Você está a ${distanceText} daqui. É necessário estar a no máximo 500 metros da unidade para avaliar.`);
-        }
+        // BYPASS PARA TESTES: Removida a trava de 500 metros para que você possa testar o modal livremente.
+        // if (distance <= 500) {
+        onVote(ratingValue);
+        // } else {
+        //   const distanceText = distance < 1000 
+        //     ? `${Math.round(distance)} metros` 
+        //     : `${(distance / 1000).toFixed(1)}km`;
+        //   showError(`Você está a ${distanceText} daqui. É necessário estar a no máximo 500 metros da unidade para avaliar.`);
+        // }
       },
       (error) => {
         setIsCheckingLocation(false);
@@ -69,6 +70,10 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
+
+  const averageRating = testimonials.length > 0
+    ? (testimonials.reduce((acc, t) => acc + (t.rating || 0), 0) / testimonials.length).toFixed(1)
+    : 0;
 
   return (
     <div className="facility-card glass-panel animate-fade-in" style={{ justifyContent: 'center' }}>
@@ -110,46 +115,22 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
         </button>
         
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '4px' }}>
-          <span className="stat-pill positive" style={{ 
-            opacity: testimonials.length === 0 ? 0.5 : 1,
-            backgroundColor: 'rgba(34, 197, 94, 0.1)',
-            color: '#22c55e',
-            padding: '4px 8px',
-            borderRadius: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            fontSize: '0.85rem',
-            fontWeight: 600
-          }}>
-            <ThumbsUp size={14} /> {testimonials.filter(t => t.recommended).length}
-          </span>
-          <span className="stat-pill negative" style={{ 
-            opacity: testimonials.length === 0 ? 0.5 : 1,
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            color: '#ef4444',
-            padding: '4px 8px',
-            borderRadius: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            fontSize: '0.85rem',
-            fontWeight: 600
-          }}>
-            <ThumbsDown size={14} /> {testimonials.filter(t => !t.recommended).length}
-          </span>
           {testimonials.length > 0 ? (
             <span style={{ 
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              color: 'white',
-              padding: '4px 8px',
+              backgroundColor: 'rgba(251, 191, 36, 0.15)',
+              color: '#fbbf24',
+              padding: '6px 12px',
               borderRadius: '12px',
               display: 'flex',
               alignItems: 'center',
-              fontSize: '0.85rem',
-              fontWeight: 600
+              gap: '6px',
+              fontSize: '1rem',
+              fontWeight: 700
             }}>
-              {Math.round((testimonials.filter(t => t.recommended).length / testimonials.length) * 100)}% Acolhedor
+              <Star size={16} fill="currentColor" /> {averageRating}
+              <span style={{ fontSize: '0.8rem', color: '#9ca3af', fontWeight: 'normal', marginLeft: '4px' }}>
+                ({testimonials.length} avaliações)
+              </span>
             </span>
           ) : (
             <span style={{ 
@@ -170,23 +151,27 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
           {isCheckingLocation ? 'Verificando sua localização...' : 'Como foi o acolhimento neste local?'}
         </p>
         
-        <div className="action-buttons">
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
           <button 
-            className="btn-dislike" 
-            onClick={() => handleVoteClick(false)}
+            className="action-btn glass-panel"
+            onClick={() => handleVoteClick(0)} // Passamos 0, o usuário escolhe a nota real no modal
             disabled={isCheckingLocation}
-            style={{ opacity: isCheckingLocation ? 0.5 : 1 }}
+            style={{ 
+              background: 'var(--accent-primary)',
+              color: 'white',
+              border: 'none',
+              padding: '14px 32px',
+              borderRadius: '24px',
+              fontSize: '1.1rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              opacity: isCheckingLocation ? 0.7 : 1,
+              transition: 'all 0.2s',
+              width: '100%',
+              maxWidth: '300px'
+            }}
           >
-            <X size={32} />
-          </button>
-
-          <button 
-            className="btn-like" 
-            onClick={() => handleVoteClick(true)}
-            disabled={isCheckingLocation}
-            style={{ opacity: isCheckingLocation ? 0.5 : 1 }}
-          >
-            <Heart size={32} />
+            {isCheckingLocation ? 'Localizando...' : 'Avaliar Local'}
           </button>
         </div>
         

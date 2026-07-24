@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { GoogleMap, useJsApiLoader, MarkerF, CircleF } from '@react-google-maps/api';
-import { Search, Heart, X, Navigation, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Search, Heart, X, Navigation, Star } from 'lucide-react';
 import './GlobalMap.css';
 
 const libraries = ['places'];
@@ -294,8 +294,9 @@ const GlobalMap = ({ facilities, testimonials, onSelectFacility, onAddDynamicFac
   const activeFacility = activeFacilityId ? facilities.find(f => f.id === activeFacilityId) : null;
   const facilityTestimonials = activeFacility ? (testimonials[activeFacility.id] || []) : [];
   const totalReviews = facilityTestimonials.length;
-  const positiveReviews = facilityTestimonials.filter(t => t.recommended).length;
-  const percentage = totalReviews > 0 ? Math.round((positiveReviews / totalReviews) * 100) : 0;
+  const averageRating = totalReviews > 0
+    ? (facilityTestimonials.reduce((acc, t) => acc + (t.rating || 0), 0) / totalReviews).toFixed(1)
+    : 0;
 
   if (loadError) {
     return <div className="global-map-container">Erro ao carregar o Google Maps.</div>;
@@ -400,22 +401,23 @@ const GlobalMap = ({ facilities, testimonials, onSelectFacility, onAddDynamicFac
             
             <h3 className="facility-card-title">{activeFacility.name}</h3>
             
-            <div className="popup-stats">
-              <span className="stat-pill positive" style={{ opacity: totalReviews === 0 ? 0.5 : 1 }}>
-                <ThumbsUp size={14} fill="currentColor" /> {positiveReviews}
-              </span>
-              <span className="stat-pill negative" style={{ 
-                backgroundColor: 'rgba(239, 68, 68, 0.1)', 
-                color: '#ef4444', 
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                opacity: totalReviews === 0 ? 0.5 : 1
-              }}>
-                <ThumbsDown size={14} fill="currentColor" /> {totalReviews - positiveReviews}
-              </span>
-              
+            <div className="popup-stats" style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '12px' }}>
               {totalReviews > 0 ? (
-                <span className="stat-pill neutral" style={{ fontWeight: 'bold' }}>
-                  {percentage}% Acolhedor
+                <span style={{ 
+                  backgroundColor: 'rgba(251, 191, 36, 0.15)',
+                  color: '#fbbf24',
+                  padding: '4px 12px',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '0.95rem',
+                  fontWeight: 700
+                }}>
+                  <Star size={14} fill="currentColor" /> {averageRating}
+                  <span style={{ fontSize: '0.75rem', color: '#9ca3af', fontWeight: 'normal', marginLeft: '2px' }}>
+                    ({totalReviews})
+                  </span>
                 </span>
               ) : (
                 <span className="stat-pill new">Sem avaliações</span>

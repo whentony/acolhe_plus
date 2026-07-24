@@ -1,17 +1,19 @@
 .profile-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   width: 100%;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .profile-header {
-  padding: 32px 24px;
+  padding: 16px 20px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .profile-avatar {
@@ -56,15 +58,15 @@
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 
 .stat-card {
-  padding: 20px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   text-align: center;
 }
 
@@ -176,24 +178,28 @@
 .form-group.flex-fill { flex: 1; }
 
 .profile-actions {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
+  margin-top: 8px;
 }
 
 .action-btn {
   width: 100%;
-  padding: 16px;
+  padding: 12px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 8px;
   background: rgba(30, 41, 59, 0.7);
   color: white;
   border: 1px solid var(--glass-border);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+  border-radius: 12px;
 }
 
 .action-btn:hover {

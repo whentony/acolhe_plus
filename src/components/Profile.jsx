@@ -199,7 +199,7 @@ const Profile = ({ user, onLogout, onNavigate, onUpdateUser }) => {
         </div>
       </div>
 
-      <div className="profile-actions" style={{ marginTop: '24px' }}>
+      <div className="profile-actions">
         <button className="action-btn glass-panel" onClick={() => onNavigate('my-reports')}>
           <MessageSquare size={20} />
           Meus Relatos
@@ -208,10 +208,7 @@ const Profile = ({ user, onLogout, onNavigate, onUpdateUser }) => {
           <MapPin size={20} />
           Endereço Completo
         </button>
-        <button className="action-btn glass-panel">
-          <Settings size={20} />
-          Configurações
-        </button>
+
         <button className="action-btn glass-panel btn-logout" onClick={onLogout}>
           <LogOut size={20} />
           Sair

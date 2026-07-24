@@ -1,0 +1,150 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc}
+\geometry{a4paper, margin=3cm}
+
+\title{\textbf{Acolhe+: Um Sistema de Mapeamento Georreferenciado para Promoção do Acolhimento em Saúde da População LGBTQIA+}}
+\author{Whentony Soares Ferreira}
+\date{Julho de 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este artigo apresenta a justificativa técnica, social e financeira para a idealização, desenvolvimento e implantação do projeto \textbf{Acolhe+}. O aplicativo tem como objetivo principal mitigar as barreiras de acesso à saúde enfrentadas pela população LGBTQIA+, com enfoque especial em pessoas transgênero, através da criação de um mapa colaborativo alimentado por geolocalização e relatos da própria comunidade. Além da análise de impacto social, este documento detalha a viabilidade técnica da arquitetura baseada em React (Web) e futura expansão para React Native (Mobile), estimativas de custos operacionais de implantação em nuvem e a qualificação do autor para a condução desta solução de Engenharia de Software voltada ao impacto social.
+\end{abstract}
+
+\section{Justificativa Social: Saúde LGBTQIA+ e a Barreira do Acolhimento}
+
+A idealização deste projeto nasceu durante um grupo de trabalho da Elo Rede LGBT, em um encontro realizado no dia 18 de Julho de 2026, onde foi debatida a urgência de ferramentas tecnológicas de proteção e acolhimento para a comunidade.
+
+Historicamente, a população LGBTQIA+, especialmente a comunidade T (pessoas transgênero, travestis e não-binárias), enfrenta obstáculos sistêmicos no acesso aos serviços de saúde pública e privada. O medo de sofrer discriminação, o desrespeito ao nome social e o despreparo clínico de profissionais para lidar com as especificidades dos corpos trans geram um fenômeno conhecido como \textit{evasão do sistema de saúde}. Como consequência, essas populações acabam buscando atendimento apenas em casos de extrema urgência, agravando quadros clínicos que poderiam ser prevenidos.
+
+O \textbf{Acolhe+} nasce para resolver o problema da \textbf{desinformação sobre segurança}. Através de uma plataforma colaborativa (crowdsourcing), a comunidade mapeia e avalia as Unidades Básicas de Saúde (UBS), clínicas e hospitais. Se um paciente é bem atendido e tem seu nome social respeitado, ele deixa uma avaliação positiva (Acolhedor). Se sofre preconceito, alerta os demais. Com o tempo, o aplicativo gera um ``mapa de calor'' de zonas seguras, devolvendo o direito à saúde digna à comunidade.
+
+A fim de garantir a veracidade dos dados e a usabilidade do sistema, a aplicação emprega os seguintes recursos técnicos na camada de interface e geolocalização:
+\begin{itemize}
+    \item \textbf{Geofencing e Ordenação Espacial:} O sistema exige que o usuário esteja em um raio de até 500 metros da unidade de saúde para registrar uma avaliação, prevenindo fraudes remotas. Além disso, ao acessar a plataforma, o algoritmo filtra e exibe apenas os estabelecimentos que estão em um raio limite de 50km (alcance prático de mobilidade urbana), sendo automaticamente reordenados utilizando a fórmula de \textit{Haversine}, priorizando na interface os locais fisicamente mais próximos à coordenada atual do usuário.
+    \item \textbf{Navegação e UX (User Experience) Dinâmica:} As distâncias são calculadas em tempo real e exibidas de forma clara nos cartões das unidades. Para otimizar a experiência, a interface foi desenhada com uma mecânica de \textit{swipe} (deslize de cartas no estilo "Tinder", implementado nativamente através da biblioteca SwiperJS), que simula elástica e perfeitamente a física de arrastar hospitais para as laterais de forma fluida.
+    \item \textbf{Garantia Absoluta de Anonimato:} Com o intuito de proteger pacientes e denunciantes, o aplicativo não expõe nomes reais nos murais públicos de relatos. O sistema atrela o relato apenas à "Identidade" (ex: Mulher Trans, Homem Trans) selecionada no cadastro, garantindo sigilo e, simultaneamente, permitindo o enriquecimento dos dados demográficos da denúncia.
+\end{itemize}
+
+\section{Geração de Dados Estatísticos e Impacto em Políticas Públicas}
+
+Mais do que um aplicativo de utilidade pública para o usuário final, o \textbf{Acolhe+} funciona como um poderoso motor de inteligência de dados em saúde populacional. Ao anonimizar e compilar as avaliações registradas, a plataforma é capaz de gerar métricas ricas, tais como:
+
+\begin{itemize}
+    \item \textbf{Mapeamento Geoespacial de Violência Institucional:} Identificação de concentrações (clusters) de relatos negativos, revelando UBSs ou hospitais específicos onde a transfobia institucional é recorrente.
+    \item \textbf{Recorte Demográfico:} Cruzamento opcional de dados (identidade de gênero e orientação sexual informados no cadastro) com as experiências de atendimento, revelando se a discriminação afeta desproporcionalmente mulheres trans, homens trans ou pessoas não-binárias em dadas regiões.
+    \item \textbf{Índice de Acolhimento Regional:} Uma pontuação média de qualidade do atendimento por bairro, município ou estado, permitindo comparações macroeconômicas.
+\end{itemize}
+
+A posse deste repositório de dados estatísticos (Big Data) tem o potencial de influenciar diretamente a \textbf{criação e o direcionamento de políticas públicas}. Prefeituras, Secretarias de Saúde e o Ministério da Saúde poderão utilizar relatórios emitidos pela plataforma para pautar decisões governamentais. Se uma clínica específica apresenta um índice histórico de "Não Acolhedor", o Estado pode intervir enviando cartilhas de letramento de gênero, promovendo capacitação obrigatória para os profissionais daquela unidade, ou realocando verbas para programas de humanização. Assim, o aplicativo não apenas protege o indivíduo, mas atua como instrumento de denúncia sistêmica e transformação do aparelho estatal.
+
+\section{Custos de Implantação e Manutenção (Go-to-Market)}
+
+A arquitetura do Acolhe+ foi desenhada sob os princípios modernos de \textit{Serverless} e \textit{Jamstack}, o que garante altíssima escalabilidade com um custo inicial próximo a zero. Abaixo, apresenta-se o estudo de viabilidade financeira para manter o projeto no ar:
+
+\subsection{Distribuição do Frontend (UX Nativa via PWA)}
+O código da interface web inicial (React + Vite) é entregue como arquivos estáticos via CDN (Vercel ou Netlify). A interface de usuário (UX) foi estritamente arquitetada para mimetizar o comportamento de um aplicativo nativo no celular. Utilizando travas de rolagem (\texttt{overflow: hidden}) e cálculos de altura de janela dinâmica (\texttt{100dvh}), o \textit{layout} evita o redimensionamento causado por barras de navegação dos browsers, garantindo foco total nos cartões centrais. O projeto já está arquitetado para a construção futura do aplicativo móvel nativo utilizando \textbf{React Native}, o que permitirá a distribuição direta nas lojas de aplicativos (Google Play Store e Apple App Store) compartilhando o mesmo código base de lógica.
+\begin{itemize}
+    \item \textbf{Custo Estimado (Web):} R\$ 0,00 (Plano gratuito cobre o tráfego inicial).
+    \item \textbf{Custo Estimado (Mobile App):} Custo único de US\$ 25,00 para conta de desenvolvedor Google e US\$ 99,00 anuais para Apple.
+\end{itemize}
+
+\subsection{Google Maps API \& Places API}
+O motor principal do aplicativo (mapas, rotas e busca de hospitais) utiliza a plataforma Google Cloud.
+\begin{itemize}
+    \item O Google oferece um crédito mensal recorrente de US\$ 200,00 gratuitos.
+    \item Consultas locais, Autocomplete e exibição do mapa nativo cabem facilmente dentro dessa cota inicial.
+    \item \textbf{Custo Estimado:} R\$ 0,00 (Para até $\sim$28.000 carregamentos de mapa por mês).
+\end{itemize}
+
+\subsection{Backend em Laravel e Bancos de Dados PostgreSQL}
+Para garantir a integridade relacional, escalabilidade e segurança no processamento das informações, a arquitetura de backend do projeto é construída utilizando o \textit{framework} PHP \textbf{Laravel}. O armazenamento de dados é dividido estrategicamente em instâncias do \textbf{PostgreSQL}:
+\begin{itemize}
+    \item \textbf{Banco de Dados Principal:} Responsável pela gestão transacional diária (autenticação, controle de unidades e CPFs criptografados).
+    \item \textbf{Banco de Histórico (Data Warehouse):} Uma base isolada dedicada exclusivamente ao registro imutável do histórico de relatos e trilhas de auditoria. Essa separação impede a degradação de performance do app, ao mesmo tempo em que viabiliza a extração maciça de dados (Big Data) para os relatórios governamentais descritos na Seção 2.
+    \item \textbf{Custo Estimado:} $\sim$ R\$ 50,00 a R\$ 120,00 por mês (utilizando instâncias otimizadas em provedores Cloud como AWS, DigitalOcean ou equivalentes).
+\end{itemize}
+
+A Figura 1 ilustra o fluxo arquitetural implementado:
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.5cm and 2cm,
+        box/.style={draw, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=gray!10},
+        db/.style={draw, cylinder, shape border rotate=90, aspect=0.25, minimum width=2cm, minimum height=2.5cm, align=center, fill=blue!10},
+        arrow/.style={-Latex, thick}
+    ]
+        
+        \node[box] (front) {Frontend \\ (React / React Native)};
+        \node[box, right=of front] (back) {Backend API \\ (Laravel PHP)};
+        \node[db, right=of back, yshift=1.5cm] (dbmain) {PostgreSQL \\ Principal};
+        \node[db, right=of back, yshift=-1.5cm] (dbhist) {PostgreSQL \\ Histórico};
+        
+        \draw[arrow, <->] (front) -- node[above] {REST/JSON} (back);
+        \draw[arrow, <->] (back) -- node[above, sloped] {ORM/SQL} (dbmain);
+        \draw[arrow, ->] (back) -- node[below, sloped] {Sync/ETL} (dbhist);
+        
+    \end{tikzpicture}
+    \caption{Arquitetura de separação de bases de dados entre fluxo transacional e Data Warehouse de Histórico.}
+    \label{fig:arquitetura}
+\end{figure}
+
+\subsection{Domínio (URL Customizada)}
+Para transmitir credibilidade, é necessário registrar um domínio oficial (ex: \texttt{acolhemais.org.br} ou \texttt{acolheplus.com}).
+\begin{itemize}
+    \item \textbf{Custo Estimado:} $\sim$ R\$ 40,00 a R\$ 80,00 por ano.
+\end{itemize}
+
+\textbf{Custo Total Estimado para Lançamento (MVP):} Aproximadamente \textbf{R\$ 50,00 anuais} apenas para o domínio. O projeto é financeiramente ultra-viável graças à arquitetura serverless moderna.
+
+\section{Perfil do Autor e Qualificação Multidisciplinar}
+
+O desenvolvimento de plataformas de impacto social exige mais do que apenas código; requer uma visão holística que una sensibilidade humana à precisão tecnológica. Minha qualificação como idealizador e arquiteto do Acolhe+ fundamenta-se em uma trajetória acadêmica e profissional profundamente multidisciplinar:
+
+\begin{itemize}
+    \item \textbf{Formação Base em Humanas e Exatas:} Sou graduado em Letras (pela Sociedade de Ensino Elvira Dayrell - SOED, como bolsista PROUNI) e também graduado em Análise e Desenvolvimento de Sistemas (pela Universidade Cruzeiro do Sul - UNICSUL). Esta dualidade me permite traduzir as dores e complexidades da linguagem e da comunicação humana para arquiteturas de software precisas.
+    
+    \item \textbf{Mestrado em Administração:} Concluído no Centro Universitário Unihorizontes (2022-2024), sob orientação do Prof. Dr. Jefferson Rodrigues Pereira, com a dissertação \textit{"A composição subjetiva da máquina-professor na Rede Estadual de Ensino de Minas Gerais"}. Esta pesquisa, fomentada como bolsista da Secretaria de Estado de Educação de Minas Gerais (SEE/MG), aprimorou minha capacidade analítica sobre estruturas públicas, fundamental para entender como o \textit{Acolhe+} pode se integrar a políticas públicas governamentais.
+    
+    \item \textbf{Doutorado em andamento em Modelagem Matemática e Computacional:} Atualmente sendo realizado no Centro Federal de Educação Tecnológica de Minas Gerais (CEFET/MG), sob orientação do Prof. Gray Farias Moita. O rigor da modelagem computacional é diretamente aplicado à lógica algorítmica deste projeto, como as validações matemáticas de criptografia de dados (CPF) e cálculos espaciais via GPS e \textit{Geofencing}.
+    
+    \item \textbf{Experiência Profissional em Engenharia de Software:} Atuação sólida como Desenvolvedor Full Stack na startup "Preço do Gás" (Agosto de 2020 a Agosto de 2025). Com mais de 5 anos de experiência no mercado de tecnologia em tempo integral, fui responsável por arquitetar e manter sistemas complexos utilizando exatamente a mesma base tecnológica (Stack) proposta neste projeto: PHP (Laravel) no \textit{backend} corporativo e JavaScript (React, React Native e Angular) no \textit{frontend} e ecossistema \textit{mobile}. Essa profunda vivência industrial atesta não só a idealização acadêmica, mas a real capacidade de execução, deploy e manutenção de escala do Acolhe+.
+\end{itemize}
+
+O Acolhe+ não é apenas um projeto técnico, mas sim a consolidação prática de todo o meu percurso: a união da análise de impacto humano (Letras e Administração) com o mais alto rigor técnico (Análise de Sistemas e Modelagem Computacional).
+
+\section{Conclusão}
+
+O projeto Acolhe+ é uma resposta tecnológica inovadora a uma falha crônica da saúde pública e privada no atendimento à população LGBTQIA+. Dotado de um custo de infraestrutura inicial virtualmente inexistente e de um código base altamente robusto, seguro e arquitetado com boas práticas de Engenharia de Software, o sistema encontra-se viável para implantação imediata, possuindo potencial latente para escalonamento nacional e salvar vidas promovendo o mapeamento de espaços seguros.
+\begin{thebibliography}{9}
+
+\bibitem{brasil2013}
+BRASIL. Ministério da Saúde. \textit{Política Nacional de Saúde Integral de Lésbicas, Gays, Bissexuais, Travestis e Transexuais}. Brasília: Ministério da Saúde, 2013.
+
+\bibitem{lionis2016}
+LIONIS, C. et al. Crowdsourcing in health and health research: a practical guide. \textit{European Journal of Public Health}, v. 26, n. 4, p. 1-2, 2016.
+
+\bibitem{sommerville2011}
+SOMMERVILLE, I. \textit{Engenharia de Software}. 9. ed. São Paulo: Pearson Prentice Hall, 2011.
+
+\bibitem{sinnott1984}
+SINNOTT, R. W. Virtues of the Haversine. \textit{Sky and Telescope}, v. 68, n. 2, p. 159, 1984.
+
+\bibitem{taibi2020}
+TAIBI, D. et al. Serverless Computing: Where are we now, and where are we heading? \textit{IEEE Software}, v. 37, n. 1, p. 32-38, 2020.
+
+\end{thebibliography}
+
+\end{document}

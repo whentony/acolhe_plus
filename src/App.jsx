@@ -250,7 +250,19 @@ function App() {
 
   return (
     <div className="app-container">
-      <main className="app-main">
+      <header style={{ 
+        textAlign: 'center', 
+        padding: 'calc(16px + env(safe-area-inset-top, 0px)) 0 16px 0', 
+        fontSize: '1.4rem', 
+        fontWeight: 800, 
+        letterSpacing: '1.5px',
+        background: 'transparent',
+        zIndex: 10,
+        margin: '0 -20px'
+      }}>
+        <span className="text-gradient-pride">Acolhe+</span>
+      </header>
+      <main className="app-main" style={{ flex: 1, overflow: 'hidden' }}>
         {renderContent()}
       </main>
 

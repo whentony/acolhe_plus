@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, Info } from 'lucide-react';
+import AboutProject from './AboutProject';
 import './Login.css';
 
 const Login = ({ onLogin, onSwitchMode }) => {
   const [email, setEmail] = useState('usuario@trans.org');
   const [password, setPassword] = useState('acolhimento123');
   const [isLoading, setIsLoading] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,6 +23,16 @@ const Login = ({ onLogin, onSwitchMode }) => {
       });
     }, 1500);
   };
+
+  if (showAbout) {
+    return (
+      <div className="login-container" style={{ background: 'var(--bg-dark)', alignItems: 'stretch' }}>
+        <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto', height: '100vh' }}>
+          <AboutProject onBack={() => setShowAbout(false)} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">
@@ -70,6 +82,24 @@ const Login = ({ onLogin, onSwitchMode }) => {
         <div className="login-footer">
           Ainda não tem uma conta? 
           <a href="#" onClick={(e) => { e.preventDefault(); onSwitchMode(); }}>Cadastre-se</a>
+        </div>
+        
+        <div style={{ textAlign: 'center', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid var(--glass-border)' }}>
+          <button 
+            onClick={() => setShowAbout(true)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--text-muted)',
+              fontSize: '0.9rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              cursor: 'pointer'
+            }}
+          >
+            <Info size={16} /> Saiba mais sobre o projeto
+          </button>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Settings, LogOut, Award, Shield, User, MessageSquare, Trash2, AlertTriangle, MapPin, Edit3, Check, X, ChevronLeft, Search } from 'lucide-react';
+import { Settings, LogOut, Award, Shield, User, MessageSquare, Trash2, AlertTriangle, MapPin, Edit3, Check, X, ChevronLeft, Search, Info } from 'lucide-react';
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
+import AboutProject from './AboutProject';
 import './Profile.css';
 
 const libraries = ['places'];
@@ -171,6 +172,10 @@ const Profile = ({ user, onLogout, onNavigate, onUpdateUser }) => {
     );
   }
 
+  if (activeView === 'about') {
+    return <AboutProject onBack={() => setActiveView('menu')} />;
+  }
+
   return (
     <div className="profile-container animate-fade-in">
       <div className="profile-header glass-panel">
@@ -207,6 +212,10 @@ const Profile = ({ user, onLogout, onNavigate, onUpdateUser }) => {
         <button className="action-btn glass-panel" onClick={() => setActiveView('address')}>
           <MapPin size={20} />
           Endereço Completo
+        </button>
+        <button className="action-btn glass-panel" onClick={() => setActiveView('about')}>
+          <Info size={20} />
+          Sobre o Projeto
         </button>
 
         <button className="action-btn glass-panel btn-logout" onClick={onLogout}>

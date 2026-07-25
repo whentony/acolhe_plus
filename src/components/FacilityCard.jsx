@@ -157,8 +157,8 @@ const FacilityCard = ({ facility, testimonials = [], onVote, onViewFeed, userLoc
             onClick={() => handleVoteClick(0)} // Passamos 0, o usuário escolhe a nota real no modal
             disabled={isCheckingLocation}
             style={{ 
-              background: 'var(--accent-primary)',
-              color: 'white',
+              background: '#fbbf24',
+              color: '#000',
               border: 'none',
               padding: '14px 32px',
               borderRadius: '24px',
